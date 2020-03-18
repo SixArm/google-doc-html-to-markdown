@@ -1,0 +1,104 @@
+#!/bin/sh
+
+sed -e '
+
+s#.*<body>##g; s#.*<body [^>]*>##g; s#</body>##g;
+s#<html>##g; s#<html [^>]*>##g; s#</html>##g;
+s#<head>##g; s#<head [^>]*>##g; s#</head>##g;
+s#<meta>##g; s#<meta [^>]*>##g; s#</meta>##g;
+s#<script>##g; s#<script [^>]*>##g; s#</script>##g;
+s#<style>##g; s#<style [^>]*>##g; s#</style>##g;
+s#<span>##g; s#<span [^>]*>##g; s#</span>##g;
+
+## Convert Google links to direct links
+
+s#<a class="[^"]*" #<a #g;
+s#https://www.google.com/url\?q=##g;
+s#&amp;sa=D&amp;[^>]*##g;
+
+## Convert escaped characters to Unicode characters
+
+s#&nbsp;# #g;
+s#&ldquo;#“#g;
+s#&lsquo;#‘#g;
+s#&rdquo;#”#g;
+s#&rsquo;#’#g;
+s#&\#39;’##g;
+
+## Paragraph
+
+s#<p [^>]*>#\
+#g; 
+
+s#</p>#\
+#g;
+
+## List
+
+s#<ul [^>]*>#\
+<ul>\
+#g; 
+
+s#</ul>#\
+</ul>\
+#g;
+
+s#<li [^>]*>#\
+* #g;
+
+s#</li>#\
+#g;
+
+## List bullets
+
+s#&middot;   *#\
+* #g;
+
+s#o   *#\
+* #g;
+
+## Headlines
+
+s#<h1 [^>]*>#\
+\# #g; 
+
+s#</h1>#\
+#g;
+
+s#<h2 [^>]*>#\
+\#\# #g; 
+
+s#</h2>#\
+#g;
+
+s#<h$ [^>]*>#\
+\#\#\# #g; 
+
+s#</h3>#\
+#g;
+
+s#<h4 [^>]*>#\
+\#\#\#\# #g; 
+
+s#</h4>#\
+#g;
+
+s#<h5 [^>]*>#\
+\#\#\#\#\# #g; 
+
+s#</h5>#\
+#g;
+
+s#<h6 [^>]*>#\
+\#\#\#\#\#\# #g; 
+
+s#</h6>#\
+#g;
+
+## Horizontal rule
+
+s#<hr [^>]*>#\
+---\
+#g;
+
+'
